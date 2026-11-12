@@ -16,6 +16,7 @@ NOTA LEGAL:
 
 import os
 import re
+import sys
 import shutil
 import queue
 import random
@@ -27,6 +28,23 @@ try:
     import yt_dlp
 except ImportError:
     yt_dlp = None
+
+
+# =========================================================
+#  COMPATIBILIDAD CON EJECUTABLE COMPILADO (PyInstaller)
+# =========================================================
+def app_base_dir() -> str:
+    """Devuelve la carpeta del ejecutable o la del script fuente."""
+    if getattr(sys, "frozen", False):
+        return os.path.dirname(os.path.abspath(sys.executable))
+    return os.path.dirname(os.path.abspath(__file__))
+
+
+def resource_path(relative_path: str) -> str:
+    """Localiza recursos empaquetados por PyInstaller o junto a la app."""
+    base_path = getattr(sys, "_MEIPASS", app_base_dir())
+    return os.path.join(base_path, relative_path)
+
 
 
 # =========================================================
@@ -116,7 +134,7 @@ class MatrixDownloaderApp(tk.Tk):
         self.log_queue = queue.Queue()
         self.entries = {}          # video_id -> dict(title, duration, checked, row_iid)
         self.playlist_title = None
-        self.output_dir = os.path.join(os.getcwd(), "descargas")
+        self.output_dir = os.path.join(app_base_dir(), "descargas")
         os.makedirs(self.output_dir, exist_ok=True)
         self.is_downloading = False
         self.stop_requested = False
@@ -129,13 +147,34 @@ class MatrixDownloaderApp(tk.Tk):
 
     # -----------------------------------------------------
     def _check_dependencies(self):
-        self.ffmpeg_ok = shutil.which("ffmpeg") is not None
+        self.ffmpeg_path = self._locate_ffmpeg()
+        self.ffmpeg_ok = self.ffmpeg_path is not None
         if yt_dlp is None:
             messagebox.showerror(
                 "错误 // ERROR",
                 "No se encontró el paquete 'yt-dlp'.\n\n"
                 "Instálalo con:\n    pip install -r requirements.txt"
             )
+
+    @staticmethod
+    def _locate_ffmpeg():
+        """
+        Busca ffmpeg en este orden:
+        1. Binario incluido en el ejecutable PyInstaller.
+        2. Binario junto al ejecutable o al script.
+        3. PATH del sistema.
+        """
+        exe_name = "ffmpeg.exe" if os.name == "nt" else "ffmpeg"
+
+        embedded = resource_path(exe_name)
+        if os.path.isfile(embedded):
+            return embedded
+
+        beside_app = os.path.join(app_base_dir(), exe_name)
+        if os.path.isfile(beside_app):
+            return beside_app
+
+        return shutil.which("ffmpeg")
 
     # -----------------------------------------------------
     def _build_style(self):
@@ -543,6 +582,9 @@ class MatrixDownloaderApp(tk.Tk):
                 "preferredcodec": codec,
                 "preferredquality": bitrate,
             }]
+
+        if self.ffmpeg_path:
+            opts["ffmpeg_location"] = self.ffmpeg_path
 
         return opts
 
