@@ -195,12 +195,12 @@ NOTA LEGAL:
 """
 
 import os
-import re
 import sys
 import shutil
 import queue
 import random
 import threading
+from filename_utils import sanitize_filename
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 
@@ -260,20 +260,6 @@ def is_playlist_url(url: str) -> bool:
     return "list=" in url
 
 
-def sanitize_filename(name: str) -> str:
-    """Return a safe, bounded filename component for cross-platform output."""
-    cleaned = re.sub(r'[\\/*?:"<>|\x00-\x1f]', "_", str(name))
-    cleaned = cleaned.strip().strip(".")
-    cleaned = re.sub(r"\s+", " ", cleaned)
-    if not cleaned or cleaned in {".", ".."}:
-        cleaned = "download"
-    if cleaned.upper().split(".", 1)[0] in {
-        "CON", "PRN", "AUX", "NUL",
-        *(f"COM{i}" for i in range(1, 10)),
-        *(f"LPT{i}" for i in range(1, 10)),
-    }:
-        cleaned = f"_{cleaned}"
-    return cleaned[:160]
 
 # =========================================================
 #  LLUVIA MATRIX (decorativa, canvas ligero)
