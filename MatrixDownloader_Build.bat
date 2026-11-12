@@ -261,7 +261,19 @@ def is_playlist_url(url: str) -> bool:
 
 
 def sanitize_filename(name: str) -> str:
-    return re.sub(r'[\\/*?:"<>|]', "_", name)
+    """Return a safe, bounded filename component for cross-platform output."""
+    cleaned = re.sub(r'[\\\\/*?:"<>|\\x00-\\x1f]', "_", str(name))
+    cleaned = cleaned.strip().strip(".")
+    cleaned = re.sub(r"\\s+", " ", cleaned)
+    if not cleaned or cleaned in {".", ".."}:
+        cleaned = "download"
+    if cleaned.upper().split(".", 1)[0] in {
+        "CON", "PRN", "AUX", "NUL",
+        *(f"COM{i}" for i in range(1, 10)),
+        *(f"LPT{i}" for i in range(1, 10)),
+    }:
+        cleaned = f"_{cleaned}"
+    return cleaned[:160]
 
 
 # =========================================================
@@ -583,6 +595,7 @@ class MatrixDownloaderApp(tk.Tk):
                     self._populate_tree(payload)
                 elif kind == "analyze_error":
                     messagebox.showerror("エラー // Error", payload)
+                elif kind == "analyze_done":
                     self.analyze_btn.configure(state="normal", text="解析 ANALIZAR")
         except queue.Empty:
             pass
@@ -647,7 +660,7 @@ class MatrixDownloaderApp(tk.Tk):
             self.log_queue.put(("analyze_error", f"No se pudo analizar la URL:\n{exc}"))
         finally:
             self.log_queue.put(("log", "解析完了 // Análisis finalizado."))
-            self.after(0, lambda: self.analyze_btn.configure(state="normal", text="解析 ANALIZAR"))
+            self.log_queue.put(("analyze_done", None))
 
     @staticmethod
     def _format_duration(seconds):
@@ -719,6 +732,7 @@ class MatrixDownloaderApp(tk.Tk):
             "noplaylist": True,
             "quiet": True,
             "no_warnings": True,
+            "nooverwrites": True,
             "progress_hooks": [self._progress_hook],
             "postprocessor_hooks": [],
         }
