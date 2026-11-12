@@ -34,9 +34,14 @@ completo de la aplicación embebido en sí mismo. Al ejecutarlo:
 
 1. Extrae `main.py` a partir de su propio contenido.
 2. Crea un entorno virtual de Python e instala `yt-dlp` y `PyInstaller`.
-3. Descarga una build portable de `ffmpeg`.
+3. Descarga una build portable de FFmpeg desde el proyecto
+   [BtbN/FFmpeg-Builds](https://github.com/BtbN/FFmpeg-Builds).
 4. Compila `MatrixDownloader.exe`, un único ejecutable con Python, `yt-dlp`
    y `ffmpeg` empaquetados dentro.
+
+El código Python incluido en el compilador se mantiene sincronizado con
+`main.py`; una comprobación automática verifica que ambas versiones no
+divergen.
 
 El resultado es un `.exe` que se puede copiar a cualquier PC con Windows
 y ejecutar con doble clic, sin instalar nada más.
