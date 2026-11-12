@@ -105,8 +105,8 @@ echo.
 echo [ERROR] Fallo instalando dependencias con pip.
 echo Causas mas probables:
 echo   - Conexion a internet caida o inestable.
-echo   - Un antivirus con inspeccion HTTPS bloqueando pip ^(prueba a
-echo     desactivar temporalmente su proteccion web^).
+echo   - Proxy o inspeccion TLS de red. Revisa certificados y
+echo     configuracion con el administrador; no desactives protecciones.
 echo   - Una VPN activa interfiriendo ^(prueba desconectandola^).
 echo Revisa el mensaje de pip mostrado arriba para mas detalle.
 pause
