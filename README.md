@@ -63,7 +63,7 @@ Run `MatrixDownloader_Build.bat` on Windows. The build process prepares the envi
 
 ## Showcase and deployment
 
-The static showcase source is available at [docs/index.html](docs/index.html). It presents the application and its workflow; it does not download, proxy or host media. GitHub Pages deployment is gated by the `ENABLE_PAGES=true` Actions variable. Enable Pages with GitHub Actions in repository settings, then configure that variable before triggering the workflow.
+The static showcase source is available at [docs/index.html](docs/index.html). It presents the application and its workflow; it does not download, proxy or host media. GitHub Pages deployment runs automatically when the showcase or workflow changes. Enable GitHub Pages with GitHub Actions in the repository settings if it has not been configured yet.
 
 ## Responsible use
 
