@@ -1,10 +1,15 @@
+<p align="center">
+  <img src="https://img.shields.io/badge/DESKTOP_APP-MATRIX_DOWNLOADER-101010?style=for-the-badge&labelColor=050805&color=00FF41" alt="Matrix Downloader"/>
+  <img src="https://img.shields.io/badge/PYTHON-TKINTER-101010?style=for-the-badge&logo=python&logoColor=00FF41" alt="Python"/>
+</p>
+
 # Matrix Downloader
 
 A local desktop application built with Python and Tkinter for managing audio and video downloads from individual URLs and playlists.
 
 <p align="center">
-  <a href="https://github.com/tzayadet/matrix_downloader"><img src="https://img.shields.io/badge/SOURCE-GITHUB-161b22?style=flat-square&logo=github" alt="Source code"></a>
-  <a href="https://tzayadet.github.io/matrix_downloader/"><img src="https://img.shields.io/badge/LIVE_SHOWCASE-OPEN-00a86b?style=flat-square" alt="Live showcase"></a> · <a href="docs/index.html"><img src="https://img.shields.io/badge/SHOWCASE-SOURCE-161b22?style=flat-square" alt="Showcase source"></a>
+  <a href="https://tzayadet.github.io/matrix_downloader/"><strong>PROJECT SHOWCASE ↗</strong></a> ·
+  <a href="https://github.com/tzayadet/matrix_downloader"><strong>SOURCE CODE</strong></a>
 </p>
 
 ## Features
@@ -18,13 +23,11 @@ A local desktop application built with Python and Tkinter for managing audio and
 
 ## Requirements
 
-- Python 3.10 or later.
-- FFmpeg.
-- Dependencies listed in [requirements.txt](requirements.txt).
+- Python 3.10+
+- FFmpeg
+- Dependencies listed in [requirements.txt](requirements.txt)
 
 ## Run locally
-
-Create and activate a virtual environment.
 
 **Windows PowerShell**
 
@@ -46,9 +49,9 @@ python main.py
 
 ## Build for Windows
 
-Run `MatrixDownloader_Build.bat` on Windows. The build process prepares the environment, installs the required dependencies and creates a portable executable.
+Run `MatrixDownloader_Build.bat` on Windows. The build process prepares the environment, installs dependencies and creates a portable executable.
 
-## Project structure
+## Project layout
 
 | Path | Purpose |
 |---|---|
@@ -60,13 +63,11 @@ Run `MatrixDownloader_Build.bat` on Windows. The build process prepares the envi
 
 ## Showcase and deployment
 
-The static showcase source is available in [docs/index.html](docs/index.html). It presents the application and its workflow; it does not download, proxy or host media. The showcase is published through the workflow in `.github/workflows/pages.yml`. Enable GitHub Pages with GitHub Actions in repository settings, then run the workflow from the Actions tab if the first deployment has not yet completed.
-
-To publish it, enable GitHub Pages with GitHub Actions in repository settings and run the Pages workflow.
+The [static showcase](https://tzayadet.github.io/matrix_downloader/) presents the application and its workflow. It does not download, proxy or host media. The source page is available at [docs/index.html](docs/index.html).
 
 ## Responsible use
 
-Use the application only for content you are authorized to download. Follow the applicable platform terms and copyright rules. A publicly accessible URL does not automatically grant permission to copy or redistribute its content.
+Use the application only for content you are authorised to download. Follow platform terms and copyright rules. A publicly accessible URL does not automatically grant permission to copy or redistribute its content.
 
 ## Tests
 
