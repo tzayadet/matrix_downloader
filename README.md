@@ -4,7 +4,7 @@ A local desktop application built with Python and Tkinter for managing audio and
 
 <p align="center">
   <a href="https://github.com/tzayadet/matrix_downloader"><img src="https://img.shields.io/badge/SOURCE-GITHUB-161b22?style=flat-square&logo=github" alt="Source code"></a>
-  <a href="docs/index.html"><img src="https://img.shields.io/badge/SHOWCASE-SOURCE-00a86b?style=flat-square" alt="Showcase source"></a>
+  <a href="https://tzayadet.github.io/matrix_downloader/"><img src="https://img.shields.io/badge/LIVE_SHOWCASE-OPEN-00a86b?style=flat-square" alt="Live showcase"></a> · <a href="docs/index.html"><img src="https://img.shields.io/badge/SHOWCASE-SOURCE-161b22?style=flat-square" alt="Showcase source"></a>
 </p>
 
 ## Features
@@ -60,7 +60,7 @@ Run `MatrixDownloader_Build.bat` on Windows. The build process prepares the envi
 
 ## Showcase and deployment
 
-The static showcase source is available in [docs/index.html](docs/index.html). It presents the application and its workflow; it does not download, proxy or host media. GitHub Pages is not currently confirmed as published for this repository.
+The static showcase source is available in [docs/index.html](docs/index.html). It presents the application and its workflow; it does not download, proxy or host media. The showcase is published through the workflow in `.github/workflows/pages.yml`. Enable GitHub Pages with GitHub Actions in repository settings, then run the workflow from the Actions tab if the first deployment has not yet completed.
 
 To publish it, enable GitHub Pages with GitHub Actions in repository settings and run the Pages workflow.
 
