@@ -1,4 +1,4 @@
-name: Python syntax check
+name: Python checks
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  compile:
+  checks:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -21,3 +21,5 @@ jobs:
           python-version: "3.11"
       - name: Compile Python sources
         run: python -m compileall -q .
+      - name: Verify portable builder synchronization
+        run: python -m unittest discover -s tests -v
