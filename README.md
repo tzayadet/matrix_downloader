@@ -1,64 +1,79 @@
 # Matrix Downloader
 
-Aplicación de escritorio local desarrollada con Python y Tkinter para gestionar descargas de audio y vídeo desde URLs individuales y playlists.
+A local desktop application built with Python and Tkinter for managing audio and video downloads from individual URLs and playlists.
 
-**Project showcase:** [Open the project page](https://tzayadet.github.io/matrix_downloader/) · [Showcase source](docs/index.html)
+<p align="center">
+  <a href="https://github.com/tzayadet/matrix_downloader"><img src="https://img.shields.io/badge/SOURCE-GITHUB-161b22?style=flat-square&logo=github" alt="Source code"></a>
+  <a href="docs/index.html"><img src="https://img.shields.io/badge/SHOWCASE-SOURCE-00a86b?style=flat-square" alt="Showcase source"></a>
+</p>
 
-## Funcionalidades
+## Features
 
-- Análisis de URLs individuales y playlists.
-- Selección individual de elementos antes de procesarlos.
-- Opciones de formato y calidad.
-- Procesamiento en segundo plano para mantener la interfaz receptiva.
-- Nombres de salida anti-colisión para evitar sobrescrituras.
-- Compilación de un ejecutable Windows mediante PyInstaller.
+- Parses individual URLs and playlist entries.
+- Allows selecting items before processing.
+- Provides format and quality options.
+- Runs processing tasks in the background to keep the interface responsive.
+- Generates collision-resistant output names.
+- Supports Windows executable packaging with PyInstaller.
 
-## Requisitos
+## Requirements
 
-- Python 3.10 o superior.
+- Python 3.10 or later.
 - FFmpeg.
-- Dependencias de [requirements.txt](requirements.txt).
+- Dependencies listed in [requirements.txt](requirements.txt).
 
-## Ejecutar desde código fuente
+## Run locally
 
-```bash
-python -m venv .venv
-```
+Create and activate a virtual environment.
 
-Windows PowerShell:
+**Windows PowerShell**
 
 ```powershell
+python -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
 python main.py
 ```
 
-Linux / macOS:
+**Linux / macOS**
 
 ```bash
+python -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
 python main.py
 ```
 
-## Compilar para Windows
+## Build for Windows
 
-Ejecuta `MatrixDownloader_Build.bat` en Windows. El proceso prepara el entorno de compilación, obtiene las dependencias necesarias y genera el ejecutable portable.
+Run `MatrixDownloader_Build.bat` on Windows. The build process prepares the environment, installs the required dependencies and creates a portable executable.
 
-## Pruebas
+## Project structure
+
+| Path | Purpose |
+|---|---|
+| `main.py` | Desktop application entry point |
+| `requirements.txt` | Python dependencies |
+| `docs/` | Static project showcase |
+| `tests/` | Automated tests |
+| `MatrixDownloader_Build.bat` | Windows build launcher |
+
+## Showcase and deployment
+
+The static showcase source is available in [docs/index.html](docs/index.html). It presents the application and its workflow; it does not download, proxy or host media. GitHub Pages is not currently confirmed as published for this repository.
+
+To publish it, enable GitHub Pages with GitHub Actions in repository settings and run the Pages workflow.
+
+## Responsible use
+
+Use the application only for content you are authorized to download. Follow the applicable platform terms and copyright rules. A publicly accessible URL does not automatically grant permission to copy or redistribute its content.
+
+## Tests
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-## Uso responsable
+## License
 
-La página de presentación no descarga ni aloja contenido. Utiliza la aplicación únicamente con contenido que tengas derecho a descargar y respeta las condiciones de uso de cada plataforma. No se debe asumir que una URL pública autoriza cualquier copia o redistribución.
-
-## Showcase
-
-Para publicar la página, activa GitHub Pages en **Settings → Pages → Build and deployment → Source → GitHub Actions** y ejecuta el workflow de publicación desde Actions.
-
-## Licencia
-
-Consulta [LICENSE](LICENSE).
+See [LICENSE](LICENSE) for the repository's licensing terms.
