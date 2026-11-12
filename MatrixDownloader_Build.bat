@@ -213,24 +213,17 @@ except ImportError:
 #  COMPATIBILIDAD CON EJECUTABLE COMPILADO (PyInstaller)
 # =========================================================
 def app_base_dir() -> str:
-    """
-    Directorio base de la aplicación:
-    - Compilado (.exe, sys.frozen): carpeta donde está el .exe.
-    - Script .py: carpeta donde está main.py.
-    """
+    """Devuelve la carpeta del ejecutable o la del script fuente."""
     if getattr(sys, "frozen", False):
         return os.path.dirname(os.path.abspath(sys.executable))
     return os.path.dirname(os.path.abspath(__file__))
 
 
 def resource_path(relative_path: str) -> str:
-    """
-    Ruta a un recurso embebido en el ejecutable (ffmpeg.exe, etc.).
-    PyInstaller --onefile descomprime los binarios añadidos con --add-binary
-    en una carpeta temporal (sys._MEIPASS) en tiempo de ejecución.
-    """
+    """Localiza recursos empaquetados por PyInstaller o junto a la app."""
     base_path = getattr(sys, "_MEIPASS", app_base_dir())
     return os.path.join(base_path, relative_path)
+
 
 
 # =========================================================
@@ -320,7 +313,7 @@ class MatrixDownloaderApp(tk.Tk):
         self.log_queue = queue.Queue()
         self.entries = {}          # video_id -> dict(title, duration, checked, row_iid)
         self.playlist_title = None
-        self.output_dir = os.path.join(os.getcwd(), "descargas")
+        self.output_dir = os.path.join(app_base_dir(), "descargas")
         os.makedirs(self.output_dir, exist_ok=True)
         self.is_downloading = False
         self.stop_requested = False
@@ -346,12 +339,9 @@ class MatrixDownloaderApp(tk.Tk):
     def _locate_ffmpeg():
         """
         Busca ffmpeg en este orden:
-        1. Embebido dentro del propio .exe (PyInstaller --add-binary), la
-           forma normal cuando se usa el ejecutable portable compilado.
-        2. Un ffmpeg.exe/ffmpeg colocado a mano junto al .exe o a main.py
-           (permite sustituirlo sin recompilar).
-        3. El PATH del sistema (caso de ejecutar desde código fuente).
-        Devuelve la ruta completa al binario, o None si no se encuentra.
+        1. Binario incluido en el ejecutable PyInstaller.
+        2. Binario junto al ejecutable o al script.
+        3. PATH del sistema.
         """
         exe_name = "ffmpeg.exe" if os.name == "nt" else "ffmpeg"
 
@@ -731,8 +721,6 @@ class MatrixDownloaderApp(tk.Tk):
             "progress_hooks": [self._progress_hook],
             "postprocessor_hooks": [],
         }
-        if self.ffmpeg_path:
-            opts["ffmpeg_location"] = self.ffmpeg_path
 
         if is_video:
             height_map = {
@@ -773,6 +761,9 @@ class MatrixDownloaderApp(tk.Tk):
                 "preferredcodec": codec,
                 "preferredquality": bitrate,
             }]
+
+        if self.ffmpeg_path:
+            opts["ffmpeg_location"] = self.ffmpeg_path
 
         return opts
 
