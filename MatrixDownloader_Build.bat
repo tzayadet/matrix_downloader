@@ -62,7 +62,124 @@ exit /b 1
 :have_python
 echo.
 echo [1/6] Extrayendo main.py y filename_utils.py...
-powershell -NoProfile -Command "$c = Get-Content -Raw -LiteralPath '%~f0'; $marker = '@@PYCODE_MARKER@@
+powershell -NoProfile -Command "$c = Get-Content -Raw -LiteralPath '%~f0'; $marker = '@@PYCODE_MARKER@@'; $idx = $c.LastIndexOf($marker); if ($idx -lt 0) { exit 1 }; $code = $c.Substring($idx + $marker.Length); $code = $code -replace '^(\r\n|\n)+', ''; $utf8NoBom = New-Object System.Text.UTF8Encoding($false); [System.IO.File]::WriteAllText('main.py', $code, $utf8NoBom)"
+if errorlevel 1 goto extract_failed
+if not exist main.py goto extract_failed
+powershell -NoProfile -Command "$c = Get-Content -Raw -LiteralPath '%~f0'; $marker = '@@FILENAME_UTILS_MARKER@@'; $idx = $c.LastIndexOf($marker); if ($idx -lt 0) { exit 1 }; $code = $c.Substring($idx + $marker.Length); $code = $code -replace '^(\r\n|\n)+', ''; $utf8NoBom = New-Object System.Text.UTF8Encoding($false); [System.IO.File]::WriteAllText('filename_utils.py', $code, $utf8NoBom)"
+if errorlevel 1 goto extract_failed
+if not exist filename_utils.py goto extract_failed
+goto extract_ok
+
+:extract_failed
+echo [ERROR] No se pudo extraer main.py desde este archivo.
+pause
+exit /b 1
+
+:extract_ok
+echo.
+echo [2/6] Creando entorno virtual...
+if not exist venv_build %PYCMD% -m venv venv_build
+if not exist venv_build\Scripts\python.exe goto venv_failed
+goto venv_ok
+
+:venv_failed
+echo.
+echo [ERROR] No se pudo crear el entorno virtual (carpeta venv_build).
+echo Esto casi siempre significa que "%PYCMD%" no es una instalacion
+echo real de Python que funcione del todo (ver el aviso sobre el alias
+echo de la Microsoft Store un poco mas arriba en esta misma ventana).
+echo.
+echo Instala Python desde https://www.python.org/downloads/, abre una
+echo terminal nueva y vuelve a ejecutar este script.
+echo.
+pause
+exit /b 1
+
+:venv_ok
+echo.
+echo [3/6] Instalando dependencias, yt-dlp y pyinstaller...
+venv_build\Scripts\pip.exe install --upgrade pip >nul
+venv_build\Scripts\pip.exe install "yt-dlp>=2024.1.1" pyinstaller
+if errorlevel 1 goto deps_failed
+goto deps_ok
+
+:deps_failed
+echo.
+echo [ERROR] Fallo instalando dependencias con pip.
+echo Causas mas probables:
+echo   - Conexion a internet caida o inestable.
+echo   - Proxy o inspeccion TLS de red. Revisa certificados y
+echo     configuracion con el administrador; no desactives protecciones.
+echo   - Una VPN activa interfiriendo ^(prueba desconectandola^).
+echo Revisa el mensaje de pip mostrado arriba para mas detalle.
+pause
+exit /b 1
+
+:deps_ok
+echo.
+echo [4/6] Preparando ffmpeg...
+if exist ffmpeg.exe goto ffmpeg_ready
+
+echo Descargando ffmpeg portable, build estatico, unos 80 MB...
+powershell -NoProfile -Command "try { Invoke-WebRequest -Uri 'https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-win64-gpl.zip' -OutFile 'ffmpeg_temp.zip' -UseBasicParsing } catch { exit 1 }"
+if errorlevel 1 goto ffmpeg_manual
+
+powershell -NoProfile -Command "Expand-Archive -Path 'ffmpeg_temp.zip' -DestinationPath 'ffmpeg_temp' -Force"
+
+for /f "delims=" %%F in ('dir /s /b ffmpeg_temp\ffmpeg.exe') do copy /y "%%F" "ffmpeg.exe" >nul
+
+if exist ffmpeg_temp rmdir /s /q ffmpeg_temp
+if exist ffmpeg_temp.zip del /q ffmpeg_temp.zip
+
+:ffmpeg_ready
+if exist ffmpeg.exe goto ffmpeg_done
+
+:ffmpeg_manual
+echo.
+echo [ERROR] No se pudo obtener ffmpeg.exe automaticamente.
+echo Descargalo a mano desde https://www.gyan.dev/ffmpeg/builds/  build "essentials"
+echo Copia el archivo ffmpeg.exe extraido a esta misma carpeta y vuelve a ejecutar este script.
+echo.
+pause
+exit /b 1
+
+:ffmpeg_done
+echo.
+echo [5/6] Compilando MatrixDownloader.exe...
+if exist build rmdir /s /q build
+if exist dist rmdir /s /q dist
+if exist MatrixDownloader.spec del /q MatrixDownloader.spec
+venv_build\Scripts\pyinstaller.exe --onefile --windowed --name MatrixDownloader --add-binary "ffmpeg.exe;." main.py
+if errorlevel 1 goto build_failed
+goto build_ok
+
+:build_failed
+echo [ERROR] PyInstaller fallo. Revisa el mensaje de arriba.
+pause
+exit /b 1
+
+:build_ok
+echo.
+echo [6/6] Finalizando...
+if exist dist\MatrixDownloader.exe copy /y dist\MatrixDownloader.exe MatrixDownloader.exe >nul
+if exist MatrixDownloader.exe goto all_done
+echo.
+echo [ERROR] La compilacion parece haber fallado.
+pause
+exit /b 1
+
+:all_done
+echo.
+echo ===============================================================
+echo   EXITO
+echo   Ejecutable portable listo: MatrixDownloader.exe
+echo   Copia solo ese archivo a cualquier PC Windows.
+echo ===============================================================
+echo.
+pause
+exit /b 0
+
+@@PYCODE_MARKER@@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
