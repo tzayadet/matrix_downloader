@@ -412,3 +412,10 @@ matrix_downloader/
     `--add-binary`. Si no encuentra un `ffmpeg.exe` embebido, recurre al
     PATH del sistema, de forma que el comportamiento es idéntico al
     ejecutar `main.py` directamente.
+
+
+## Project showcase
+
+Static project overview: https://tzayadet.github.io/matrix_downloader/
+
+The showcase is informational only; the application remains a local desktop program and no downloads are performed by the website.
