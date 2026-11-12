@@ -6,8 +6,7 @@ import re
 def sanitize_filename(name: str) -> str:
     """Return a safe, bounded filename component for cross-platform output."""
     cleaned = re.sub(r'[\\/*?:"<>|\x00-\x1f]', "_", str(name))
-    cleaned = cleaned.strip().strip(".")
-    cleaned = re.sub(r"\s+", " ", cleaned)
+    cleaned = re.sub(r"\s+", " ", cleaned).strip().strip(".").strip()
     if not cleaned or cleaned in {".", ".."}:
         cleaned = "download"
     if cleaned.upper().split(".", 1)[0] in {
