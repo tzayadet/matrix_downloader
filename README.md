@@ -416,6 +416,8 @@ matrix_downloader/
 
 ## Project showcase
 
-Static project overview: https://tzayadet.github.io/matrix_downloader/
+Static project overview: [docs/index.html](docs/index.html). GitHub Pages is not published yet.
+
+To publish it, select **Settings → Pages → Build and deployment → Source → GitHub Actions**, then configure the repository Actions variable `ENABLE_PAGES=true`. The deployment workflow stays skipped until that setting is present.
 
 The showcase is informational only; the application remains a local desktop program and no downloads are performed by the website.
