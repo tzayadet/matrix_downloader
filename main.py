@@ -7,7 +7,8 @@
 
 Requisitos:
     pip install -r requirements.txt
-    ffmpeg instalado y en el PATH del sistema
+    Modo fuente: ffmpeg instalado y en el PATH del sistema.
+    Ejecutable portable: ffmpeg se incluye durante la compilación.
 
 NOTA LEGAL:
     Úsala únicamente para descargar contenido del que tengas derechos.
