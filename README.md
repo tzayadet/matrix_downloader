@@ -85,46 +85,43 @@ necesario para uso personal). Pulsa "Más información" → "Ejecutar de
 todas formas".
 
 **El antivirus marca o elimina `MatrixDownloader.exe`**
-Falso positivo habitual en ejecutables `--onefile` de PyInstaller, por
-cómo se autoextraen al arrancar. Verifícalo en
-https://www.virustotal.com si tienes dudas, o añade una excepción en tu
-antivirus para el archivo o la carpeta.
+Un ejecutable PyInstaller sin firma puede generar alertas heurísticas,
+pero no debe asumirse que cualquier detección sea un falso positivo.
 
-**Control inteligente de aplicaciones (Smart App Control) bloquea el
-proceso de compilación**
-Es una función de seguridad de Windows 11 que bloquea ejecutables sin
-reputación conocida (puede afectar a `python.exe`, `pip.exe` o
-`pyinstaller.exe` recién creados en el entorno virtual). Pasos:
+- No desactives el antivirus ni crees exclusiones globales para ejecutarlo.
+- Comprueba que el archivo procede de una compilación que has realizado tú
+  desde este repositorio y revisa el código antes de compilarlo.
+- Analiza el ejecutable con Microsoft Defender y, si lo consideras útil,
+  con un servicio multi-motor. No subas archivos privados o sensibles a
+  servicios públicos de análisis.
+- Si la detección persiste, no ejecutes el binario hasta entender el motivo.
+  La ausencia de detecciones tampoco garantiza que un archivo sea seguro.
 
-1. Abre Seguridad de Windows → Control de aplicaciones y del explorador →
-   Historial de protección. Busca la entrada del bloqueo y, si aparece,
-   usa "Acciones" → "Permitir en el dispositivo". Es la opción menos
-   drástica.
-2. Si el bloqueo persiste, en Seguridad de Windows → Control de
-   aplicaciones y del explorador → Configuración de Control inteligente
-   de aplicaciones, cámbialo a "Desactivado".
-3. Importante: una vez desactivado, Windows no permite reactivarlo salvo
-   reinstalando el sistema desde cero. Usa esta opción solo si el paso 1
-   no funciona.
-4. Reinicia el equipo tras cualquiera de los dos cambios y vuelve a
-   ejecutar el script.
+**Smart App Control bloquea el proceso de compilación**
+No desactives Smart App Control para compilar o ejecutar este proyecto.
+Comprueba el motivo en Seguridad de Windows → Control de aplicaciones y
+del explorador → Historial de protección. Si Windows bloquea un componente,
+detén el proceso y verifica su procedencia. Puedes compilar en un entorno
+de desarrollo aislado y actualizado, pero no debes añadir exclusiones ni
+permitir archivos cuya procedencia no hayas comprobado.
 
-**`ConnectionResetError` o fallos de conexión al instalar `yt-dlp` /
+**`ConnectionResetE**`ConnectionResetError` o fallos de conexión al instalar `yt-dlp` /
 `pyinstaller`**
-Suele deberse a software que intercepta el tráfico HTTPS hacia los
-repositorios de paquetes Python (PyPI), no a un problema del script.
-Causas más frecuentes, en orden de probabilidad:
+Puede deberse a un corte de red, una VPN, un proxy corporativo o
+un problema de certificados TLS. Prueba, en este orden:
 
-1. Antivirus con inspección HTTPS (Avast, AVG, Kaspersky, Bitdefender,
-   ESET...): desactiva temporalmente la protección web/HTTPS mientras
-   corre el paso de instalación de dependencias.
-2. VPN activa: pruébalo con la VPN desconectada.
-3. Firewall de red (router, red corporativa): prueba con otra red, por
-   ejemplo compartiendo datos móviles desde el teléfono.
-4. Corte de red puntual: vuelve a ejecutar el script; no hace falta
-   borrar nada si el entorno virtual ya se creó.
+1. Repite la operación y comprueba que la fecha y hora del sistema sean
+   correctas.
+2. Si utilizas un proxy corporativo, sigue el procedimiento de certificados
+   y soporte de tu organización.
+3. Comprueba la conexión desde otra red de confianza si está permitido.
+4. Actualiza Python y pip desde sus fuentes oficiales.
 
-**Falla la descarga automática de `ffmpeg`**
+No desactives la validación TLS, no uses opciones como `--trusted-host`
+para eludir errores de certificados y no desactives la inspección de
+seguridad del equipo como solución general.
+
+ automática de `ffmpeg`**
 El script lo indicará explícitamente. Solución manual:
 
 1. Ve a https://www.gyan.dev/ffmpeg/builds/ y descarga el build
