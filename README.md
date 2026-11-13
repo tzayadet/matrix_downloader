@@ -8,8 +8,8 @@
 A local desktop application built with Python and Tkinter for managing audio and video downloads from individual URLs and playlists.
 
 <p align="center">
-  <a href="https://tzayadet.github.io/matrix_downloader/"><strong>LIVE DEMO ↗</strong></a> ·
-  <a href="https://github.com/tzayadet/matrix_downloader"><strong>SOURCE CODE</strong></a>
+  <a href="docs/index.html"><strong>SHOWCASE SOURCE</strong></a> ·
+  <a href="https://github.com/tzayadet/matrix_downloader"><strong>SOURCE CODE</strong></a> · <sub>PAGES ACTIVATION REQUIRED</sub>
 </p>
 
 ## Features
@@ -63,7 +63,7 @@ Run `MatrixDownloader_Build.bat` on Windows. The build process prepares the envi
 
 ## Showcase and deployment
 
-The static showcase source is available at [docs/index.html](docs/index.html). It presents the application and its workflow; it does not download, proxy or host media. GitHub Pages publishes the static showcase; the desktop application remains local.
+The static showcase source is available at [docs/index.html](docs/index.html). GitHub Pages activation is required before public deployment. The showcase does not download, proxy or host media; the desktop application remains local.
 
 ## Responsible use
 
